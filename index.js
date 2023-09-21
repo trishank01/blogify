@@ -4,6 +4,7 @@ const  mongoose = require("mongoose");
 const User = require("./models/User");
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+const cookieParser = require("cookie-parser")
 const app = express()
 
 
@@ -14,6 +15,7 @@ app.use(cors({
     credentials : true, origin : "http://localhost:3000"
 }));
 app.use(express.json())
+app.use(cookieParser())
 
 mongoose.connect("mongodb+srv://blog:KqlTO9WlGpW2UAo3@clusterblogpost.wurtrvt.mongodb.net/?retryWrites=true&w=majority")
 
@@ -42,11 +44,29 @@ app.post("/login" , async (req , res) => {
       //logged in
        jwt.sign({username , id: userDoc._id} , secret , {} , (error , token) => {
          if(error) throw error;
-         res.cookie("token" , token).json(token)
+         res.cookie("token" , token).json({
+            id : userDoc._id,
+            username
+
+         })
        })
     }else{
         res.status(400).json("wrong credentials")
     }
+})
+
+
+app.get("/profile" , (req, res) => {
+    const {token} = req.cookies;
+    jwt.verify(token , secret , {}, (err , info) => {
+       if(err) throw err;
+       res.json(info)
+    })
+})
+
+
+app.post("/logout" , (req , res) => {
+    res.cookie("token" , '').json('ok')
 })
 
 //blog

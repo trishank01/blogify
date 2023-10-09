@@ -10,7 +10,7 @@ const Header = () => {
       credentials : "include",
     }).then(res => {
        res.json().then(userInfo => {
-        setUserinfo(userInfo.username)
+        setUserinfo(userInfo)
        })
     })
   },[])
@@ -32,7 +32,7 @@ const Header = () => {
       </Link>
       <nav>
         {username && <>
-        <p>{username}</p>
+        <Link> User : {username}</Link>
         <Link to="/create">Create new post</Link>
         <Link onClick={handleLogout}>Logout</Link>
         </>}

@@ -12,7 +12,7 @@ const IndexPage = () => {
   }, [])
   console.log(post)
   return (
-    <div>
+    <main>
      {post.length > 0 && post.map((post) => {
       return (
         <div key={post._id} >
@@ -20,7 +20,7 @@ const IndexPage = () => {
         </div>
       )
      })}
-    </div>
+    </main>
   )
 }
 
